@@ -11,13 +11,14 @@ public:
 	string partyName; /*store the name of the party to which the vector belongs,
 						needed to ensure orders from one party go to only one vector
 						*/
-	void add_node(Order newOrder);
-	int remove_node(int orderID);
-	vector<int> check_list_match(Order newOrder) const;
-	void show_data() const; //for debugging
-
-private:
 	vector<Order> orders;
+	int numNodes;
+
+	int add_node(Order newOrder);
+	int remove_node(int orderID);
+	int check_list_match(Order newOrder, int bestPrice);
+	void show_data() const; //for debugging
+	
 };
 
 #endif

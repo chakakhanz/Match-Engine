@@ -14,7 +14,7 @@ public:
 	double price;
 	int size;
 	int orderid;
-	int compare_orders(Order orderIn);
+	int check_best_match(Order orderIn, double bestPrice, int bestOrderID, int buyOrSell);
 };
 
 #endif

@@ -3,7 +3,6 @@
 #include <string>
 #include <memory>
 #include <type_traits>
-#include <cstdlib>
 #include <fstream>
 #include "Order.hpp"
 #include "OrderBook.hpp"
@@ -13,14 +12,13 @@
 using namespace std;
 
 int main(){
-	unique_ptr<OrderBook> orderBook(new OrderBook());
-	
+	unique_ptr<OrderBook> orderBook = make_unique<OrderBook>();
 	string option;
 	string party, instrument;
-	int price; 		/*would be double, but even using c++11 standard the stod &
-				 	stoi functions are not defined on my machine.
-					Using int with c-style strings for simplicity's sake*/
+	double price;
 	int size;
+
+
 	string tempStr; //for storing number strings from command line for conversion
 	string buyOrSell;
 	int orderType;
@@ -56,21 +54,24 @@ int main(){
 				instrument = buf;
 
 				getline(fileName, buf);
-				price = atoi(buf.c_str());
+				price = stod(buf);
 
 				getline(fileName, buf);
-				size = atoi(buf.c_str());
+				size = stoi(buf);
 
 				Order temp = Order(party, instrument, price, size); 
 				int match = orderBook->check_for_match(temp, orderType); /*check to see if there is a match before entering into the book
 																			if yes, no need to actually insert it*/
+				
 				if(match != -1){ //match found; remove matching order already in the book
 					cout << "Match found for " << party << ", selling " << size << " unit(s) of " << instrument << " for " << price << endl;
 					if(orderType == BUY){
-						orderBook->remove_order(match, SELL);
+						if(orderBook->remove_order(match, SELL) == 0){
+						cout << " order removed\n";
+						}
 					}
 					else if(orderType == SELL){
-						orderBook->remove_order(match, BUY);
+						if (orderBook->remove_order(match, BUY) == 0) { cout << "order removed\n"; }
 					}
 				}
 				else{ //no match was found; add order to list
@@ -113,10 +114,10 @@ int main(){
 				cin >> instrument;
 				cout << "Enter the price: ";
 				cin >> tempStr;
-				price = atoi(tempStr.c_str());
+				price = stod(tempStr);
 				cout << "Enter the size: ";
 				cin >> tempStr;
-				size = atoi(tempStr.c_str());
+				size = stoi(tempStr);
 
 				Order temp = Order(party, instrument, price, size); 
 				int match = orderBook->check_for_match(temp, orderType); /*check to see if there is a match before entering into the book
