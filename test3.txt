@@ -1,0 +1,20 @@
+b 
+company a
+contract
+100
+1
+b
+company b
+bond
+200
+4
+s
+company c
+contract
+100
+1
+s
+company d
+contract
+90
+1

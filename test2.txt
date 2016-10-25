@@ -1,0 +1,35 @@
+b
+company x
+bonds
+210293
+320
+s
+company y
+stocks
+9239829
+9283
+s
+company z
+bonds
+929
+12
+s
+company y
+contract
+9239829
+9283
+b
+company x
+bonds
+210293
+320
+s
+company x
+bonds
+210293
+320
+b
+company x
+stocks
+9239829
+9283
