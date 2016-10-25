@@ -64,7 +64,7 @@ int main(){
 																			if yes, no need to actually insert it*/
 				
 				if(match != -1){ //match found; remove matching order already in the book
-					cout << "Match found for " << party << ", selling " << size << " unit(s) of " << instrument << " for " << price << endl;
+					cout << "Match found for " << party << ", "<< size << " unit(s) of " << instrument << " for " << price << endl;
 					if(orderType == BUY){
 						if(orderBook->remove_order(match, SELL) == 0){
 						cout << " order removed\n";
