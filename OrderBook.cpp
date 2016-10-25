@@ -74,7 +74,6 @@ int OrderBook::check_for_match(Order newOrder, int buyOrSell){
 			}
 		}
 	}
-	cout << currentMatch << " " << bestPrice << endl;
 	return currentMatch;
 
 }
