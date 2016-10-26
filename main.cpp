@@ -39,7 +39,7 @@ int main(){
 				getline(fileName, buf);
 				buyOrSell = buf;
 
-				if(buyOrSell.compare("b") == 0){
+				if(buyOrSell.compare("b") == 0){		
 					orderType = BUY;
 				}
 				else if(buyOrSell.compare("s") == 0){
