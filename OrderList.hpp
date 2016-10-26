@@ -15,8 +15,7 @@ public:
 	int numNodes;
 
 	int add_node(Order newOrder);
-	int remove_node(int orderID);
-	int check_list_match(Order newOrder, int bestPrice);
+	int update_node(int orderID, int orderSize);
 	void show_data() const; //for debugging
 	
 };

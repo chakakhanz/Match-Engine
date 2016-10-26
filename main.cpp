@@ -10,7 +10,6 @@
 #include "variables.hpp"
 
 using namespace std;
-
 int main(){
 	unique_ptr<OrderBook> orderBook = make_unique<OrderBook>();
 	string option;
@@ -59,26 +58,27 @@ int main(){
 				getline(fileName, buf);
 				size = stoi(buf);
 
-				Order temp = Order(party, instrument, price, size); 
+				Order temp = Order(party, instrument, price, size);
 				int match = orderBook->check_for_match(temp, orderType); /*check to see if there is a match before entering into the book
-																			if yes, no need to actually insert it*/
-				
-				if(match != -1){ //match found; remove matching order already in the book
-					cout << "Match found for " << party << ", "<< size << " unit(s) of " << instrument << " for " << price << endl;
-					if(orderType == BUY){
-						if(orderBook->remove_order(match, SELL) == 0){
-						cout << " order removed\n";
+																		 if yes, no need to actually insert it*/
+				if (match != -1) { //match found; remove matching order already in the book
+					cout << "Match found for " << party << " " << instrument << " " << price << " " << size << endl;
+					if (orderType == BUY) {
+						if (orderBook->update_order(match, size, SELL) == 0) {
+							cout << "order removed" << endl;
 						}
 					}
-					else if(orderType == SELL){
-						if (orderBook->remove_order(match, BUY) == 0) { cout << "order removed\n"; }
+					else if (orderType == SELL) {
+						if (orderBook->update_order(match, size, BUY) == 0) {
+							cout << "order removed" << endl;
+						}
 					}
 				}
-				else{ //no match was found; add order to list
-					if(orderType == BUY){
+				else { //no match was found; add order to list
+					if (orderType == BUY) {
 						orderBook->add_order(temp, orderType);
 					}
-					else if(orderType == SELL){
+					else if (orderType == SELL) {
 						orderBook->add_order(temp, orderType);
 					}
 				}
@@ -125,10 +125,14 @@ int main(){
 				if(match != -1){ //match found; remove matching order already in the book
 					cout << "Match found for " << party << " " << instrument << " " << price << " " << size << endl;
 					if(orderType == BUY){
-						orderBook->remove_order(match, SELL);
+						if (orderBook->update_order(match, size, SELL) == 0) {
+							cout << "order removed" << endl;
+						}
 					}
 					else if(orderType == SELL){
-						orderBook->remove_order(match, BUY);
+						if (orderBook->update_order(match, size, BUY) == 0) {
+							cout << "order removed" << endl;
+						}
 					}
 				}
 				else{ //no match was found; add order to list
