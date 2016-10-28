@@ -10,36 +10,35 @@
 #include "variables.hpp"
 #include "Input.hpp"
 
-using namespace std;
 
 int main(){
-	shared_ptr<OrderBook> orderBook = make_shared<OrderBook>();
+	std::shared_ptr<OrderBook> orderBook = std::make_shared<OrderBook>();
 	Input inputObj = Input();
-	string option;
-	string party, instrument;
+	std::string option;
+	std::string party, instrument;
 	double price;
 	int size;
 
 
-	string tempStr; //for storing number strings from command line for conversion
-	string buyOrSell;
+	std::string tempStr; //for storing number strings from command line for conversion
+	std::string buyOrSell;
 	int orderType;
 	
-	cout << "Choose (f)ile mode or (m)anual mode:" << endl;
-	cin >> option;
+	std::cout << "Choose (f)ile mode or (m)anual mode:" << std::endl;
+	std::cin >> option;
 	if(option.compare("f") == 0){ //automated entry
-		ifstream fileName;
-		string fIn;
-		cout << "Enter file name" << endl;
-		cin >> fIn;
+		std::ifstream fileName;
+		std::string fIn;
+		std::cout << "Enter file name" << std::endl;
+		std::cin >> fIn;
 		fileName.open(fIn);
 		if(!fileName.is_open()){
-			cout << "Invalid file. Exiting...";
+			std::cout << "Invalid file. Exiting...";
 		}
 		else{
-			string buf;
+			std::string buf;
 			while(!fileName.eof()){ //grabs 5 lines from the file and creates an object. files are formatted for this
-				getline(fileName, buf);
+				std::getline(fileName, buf);
 				buyOrSell = buf;
 				
 				if(buyOrSell.compare("b") == 0){		
@@ -70,10 +69,10 @@ int main(){
 
 	else if(option.compare("m") == 0){ //manual entry
 		while(1){ //input loop
-			cout << "Would you like to place an order? y/n: ";
-			cin >> option;
+			std::cout << "Would you like to place an order? y/n: ";
+			std::cin >> option;
 			if(option.compare("y") != 0 && option.compare("n") != 0){
-				cout << "Invalid option. Enter y or n" << endl;
+				std::cout << "Invalid option. Enter y or n" << std::endl;
 				continue;
 			}
 			
@@ -81,10 +80,10 @@ int main(){
 				break;
 			}
 			else{
-				cout << "Is this a buy or sell order? (enter b or s)";
+				std::cout << "Is this a buy or sell order? (enter b or s)";
 				
 				while (1) {
-					cin >> buyOrSell;
+					std::cin >> buyOrSell;
 					if (buyOrSell.compare("b") == 0) {
 						orderType = BUY;
 						break;
@@ -93,22 +92,23 @@ int main(){
 						orderType = SELL;
 						break;
 					}
-					cout << "Invalid option. Please enter b or s\n";
+					std::cout << "Invalid option. Please enter b or s\n";
 				}
 
-				cout << "Enter the party name: ";
-				cin >> party;
-				cout << "Enter the instrument: ";
-				cin >> instrument;
-				cout << "Enter the price: ";
-				cin >> tempStr;
+				std::cout << "Enter the party name: ";
+				std::ws(std::cin);
+				std::getline(std::cin, party);
+				std::cout << "Enter the instrument: ";
+				std::getline(std::cin, instrument);
+				std::cout << "Enter the price: ";
+				std::cin >> tempStr;
 				price = stod(tempStr);
-				cout << "Enter the size: ";
-				cin >> tempStr;
+				std::cout << "Enter the size: ";
+				std::cin >> tempStr;
 				size = stoi(tempStr);
 
 				Order temp = Order(party, instrument, price, size); 
-				cout << "checking..\n";
+				std::cout << "checking..\n";
 				inputObj.check_input(orderBook, temp, orderType); //checks for match already in book and updates lists as needed
 				continue;
 			}
@@ -116,7 +116,7 @@ int main(){
 
 	}
 	else{
-		cout << "Invalid option. Exiting...";
+		std::cout << "Invalid option. Exiting...";
 	}
 	
 }
