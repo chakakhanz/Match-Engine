@@ -1,0 +1,50 @@
+b
+company a
+contract
+90
+1
+b
+company a
+bondolino
+100
+1
+b
+company a
+stock
+100
+1
+b
+company q
+contract
+101
+1
+b
+company a
+contract
+100
+2
+b
+company b
+bond
+200
+4
+s
+company c
+contract
+101
+4
+s
+company d
+contract
+100
+1
+s
+company f
+butts
+100
+1
+b
+company f
+contract
+101
+3

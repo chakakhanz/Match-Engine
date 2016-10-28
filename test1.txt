@@ -14,24 +14,24 @@ bond
 50123
 2000
 b
-chase bank
+chase bank 1
 bond
 52123
 200
 b
-chase bank
+chase bank 2
 bond
 524123
 2000
 b
-chase bank
+chase bank 3
 bond
-512312323
+51323
 2000
 b
-chase bank
+chase bank 4
 bond
-5212323
+521223
 2000
 b
 some bank
@@ -39,7 +39,7 @@ bond
 3123123
 2000
 b
-chase bank
+chase bank 5
 bond
 523123
 20234
@@ -47,19 +47,19 @@ s
 some bank
 bond
 52023
-2000
+2001
 s
-chase bank
+chase bank 6
 bond
 52343
 2000
 b
-chase bank
+chase bank 7
 bond
 50123
 2000
-b
-chase bank
+s
+chase bank 8
 bond
 11231
 2000

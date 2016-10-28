@@ -2,15 +2,13 @@
 #define ORDER_HPP
 #include <string>
 
-using namespace std;
-
 class Order{
 public:
 	Order();
-	Order(string partyIn, string instrumentIn, double priceIn, int sizeIn);
+	Order(std::string partyIn, std::string instrumentIn, double priceIn, int sizeIn);
 	~Order();
-	string party;
-	string instrument;
+	std::string party;
+	std::string instrument;
 	double price;
 	int size;
 	int orderid;

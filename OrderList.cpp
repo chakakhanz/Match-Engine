@@ -1,9 +1,10 @@
 #include "OrderList.hpp"
 #include "Node.hpp"
+#include "variables.hpp"
 #include <memory>
 #include <iostream>
 #include <algorithm>
-#include <typeinfo>
+
 
 OrderList::OrderList(): partyName(""), numNodes(0){
 }
@@ -12,8 +13,8 @@ OrderList::~OrderList() {}
 
 int OrderList::add_node(Order newOrder){
 	for (auto iter : orders) { //check if this new order is a duplicate. if yes, return
-		if (iter.instrument.compare(newOrder.instrument) == 0 && iter.size == newOrder.size) {
-			cout << "***Error: duplicate entry***" << endl;
+		if (iter.party.compare(newOrder.party) == 0 && iter.instrument.compare(newOrder.instrument) == 0 && iter.size == newOrder.size && iter.price == newOrder.price) {
+			std::cout << "***Error: duplicate entry***" << "\n";
 			return -1;
 		}
 	}
@@ -27,30 +28,34 @@ int OrderList::add_node(Order newOrder){
 		return 0;
 	}
 	catch (int e) {
-		cout << "Exception occured: " << e << endl;
+		std::cout << "Exception occured: " << e << "\n";
 		return -1;
 	}
 }
 
-int OrderList::update_node(int orderID, int orderSize ){
-	int returnVal = -1;
-	vector<Order> *ord = &orders;
+int OrderList::update_node(int orderID, const int orderSize ){
+	int returnVal = NO_MATCH; //default return value
 	for (int i = 0; i < numNodes; i++) {
-		if (orderID == (*ord)[i].orderid) {
-			cout << "Order from " << (*ord)[i].party << ", with " << (*ord)[i].size << " (" << (*ord)[i].size - orderSize << " after transaction) unit(s) of " << (*ord)[i].instrument << " for " << (*ord)[i].price << endl;
-			if ((*ord)[i].size == orderSize){ //if order is completely filled
+		if (orderID == orders[i].orderid) {
+			std::cout << "Order from " << orders[i].party << ", with " << orders[i].size << " (" << orders[i].size - orderSize << " after transaction) unit(s) of " << orders[i].instrument << " for " << orders[i].price << "\n";
+			if (orders[i].size == orderSize) { //if order is completely filled
 				//orders.erase(orders.begin() + i);
-				(*ord).erase(remove_if((*ord).begin(), (*ord).end(), [orderSize](Order x) mutable {return orderSize == x.size;}));
+				orders.erase(remove_if(orders.begin(), orders.end(), [orderID](Order x) {return orderID == x.orderid;}));
 				numNodes--;
 				returnVal = 0;
 			}
-			else if ((*ord)[i].size > orderSize){
-				(*ord)[i].size -= orderSize;
-				returnVal = -1; //lets caller know an order was not removed
+			else if (orders[i].size > orderSize) { //if order in book is larger than incoming order
+				orders[i].size -= orderSize;
+				returnVal = -1;
+			}
+			else if (orders[i].size < orderSize) { //if new order is larger than order in book, remove the order and return the remainder
+				returnVal = orderSize - orders[i].size;
+				orders.erase(remove_if(orders.begin(), orders.end(), [orderID](Order x) {return orderID == x.orderid;}));
+				numNodes--;
 			}
 			else {
-				returnVal = -1; //lets caller know an order was not removed
-			}		
+				returnVal = FAIL;
+			}
 		}
 	}
 	return returnVal;
@@ -58,7 +63,9 @@ int OrderList::update_node(int orderID, int orderSize ){
 
 void OrderList::show_data() const{
 	for(auto iter: orders){
-		cout << iter.party << " ";
-		cout << iter.instrument << endl;
+		std::cout << iter.party << " ";
+		std::cout << iter.instrument << " ";
+		std::cout << iter.price << " ";
+		std::cout << iter.size << "\n";
     }
 }

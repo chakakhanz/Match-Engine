@@ -12,8 +12,8 @@ public:
 	~OrderBook();
 	int buyOrderID;
 	int sellOrderID;
-	vector<OrderList> buyOrders;
-	vector<OrderList> sellOrders;
+	std::vector<OrderList> buyOrders;
+	std::vector<OrderList> sellOrders;
 
 	int add_order(Order newOrder, int buyOrSell);
 	int update_order(int orderID, int orderSize, int buyOrSell); 

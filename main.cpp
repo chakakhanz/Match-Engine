@@ -8,10 +8,13 @@
 #include "OrderBook.hpp"
 #include "OrderList.hpp"
 #include "variables.hpp"
+#include "Input.hpp"
 
 using namespace std;
+
 int main(){
-	unique_ptr<OrderBook> orderBook = make_unique<OrderBook>();
+	shared_ptr<OrderBook> orderBook = make_shared<OrderBook>();
+	Input inputObj = Input();
 	string option;
 	string party, instrument;
 	double price;
@@ -38,7 +41,7 @@ int main(){
 			while(!fileName.eof()){ //grabs 5 lines from the file and creates an object. files are formatted for this
 				getline(fileName, buf);
 				buyOrSell = buf;
-
+				
 				if(buyOrSell.compare("b") == 0){		
 					orderType = BUY;
 				}
@@ -59,29 +62,7 @@ int main(){
 				size = stoi(buf);
 
 				Order temp = Order(party, instrument, price, size);
-				int match = orderBook->check_for_match(temp, orderType); /*check to see if there is a match before entering into the book
-																		 if yes, no need to actually insert it*/
-				if (match != -1) { //match found; remove matching order already in the book
-					cout << "Match found for " << party << " " << instrument << " " << price << " " << size << endl;
-					if (orderType == BUY) {
-						if (orderBook->update_order(match, size, SELL) == 0) {
-							cout << "order removed" << endl;
-						}
-					}
-					else if (orderType == SELL) {
-						if (orderBook->update_order(match, size, BUY) == 0) {
-							cout << "order removed" << endl;
-						}
-					}
-				}
-				else { //no match was found; add order to list
-					if (orderType == BUY) {
-						orderBook->add_order(temp, orderType);
-					}
-					else if (orderType == SELL) {
-						orderBook->add_order(temp, orderType);
-					}
-				}
+				inputObj.check_input(orderBook, temp, orderType);
 			}
 			fileName.close();
 		}
@@ -101,13 +82,20 @@ int main(){
 			}
 			else{
 				cout << "Is this a buy or sell order? (enter b or s)";
-				cin >> buyOrSell;
-				if(buyOrSell.compare("b") == 0){
-					orderType = BUY;
+				
+				while (1) {
+					cin >> buyOrSell;
+					if (buyOrSell.compare("b") == 0) {
+						orderType = BUY;
+						break;
+					}
+					else if (buyOrSell.compare("s") == 0) {
+						orderType = SELL;
+						break;
+					}
+					cout << "Invalid option. Please enter b or s\n";
 				}
-				else if(buyOrSell.compare("s") == 0){
-					orderType = SELL;
-				}
+
 				cout << "Enter the party name: ";
 				cin >> party;
 				cout << "Enter the instrument: ";
@@ -120,29 +108,8 @@ int main(){
 				size = stoi(tempStr);
 
 				Order temp = Order(party, instrument, price, size); 
-				int match = orderBook->check_for_match(temp, orderType); /*check to see if there is a match before entering into the book
-																			if yes, no need to actually insert it*/
-				if(match != -1){ //match found; remove matching order already in the book
-					cout << "Match found for " << party << " " << instrument << " " << price << " " << size << endl;
-					if(orderType == BUY){
-						if (orderBook->update_order(match, size, SELL) == 0) {
-							cout << "order removed" << endl;
-						}
-					}
-					else if(orderType == SELL){
-						if (orderBook->update_order(match, size, BUY) == 0) {
-							cout << "order removed" << endl;
-						}
-					}
-				}
-				else{ //no match was found; add order to list
-					if(orderType == BUY){
-						orderBook->add_order(temp, orderType);
-					}
-					else if(orderType == SELL){
-						orderBook->add_order(temp, orderType);
-					}
-				}
+				cout << "checking..\n";
+				inputObj.check_input(orderBook, temp, orderType); //checks for match already in book and updates lists as needed
 				continue;
 			}
 		}
