@@ -1,11 +1,11 @@
 GXX = g++
 GXXFLAGS = -std=c++0x -Wall
 
-all: main.o Order.o OrderBook.o OrderList.o
-	$(GXX) $(GXXFLAGS) main.o Order.o OrderList.o OrderBook.o -o match_engine.exe
+all: main.o Order.o OrderBook.o OrderList.o Input.o
+	$(GXX) $(GXXFLAGS) main.o Order.o OrderList.o OrderBook.o Input.o -o match_engine.exe
 
-debug: main.o Order.o OrderBook.o OrderList.o
-	$(GXX) $(GXXFLAGS) -g main.o Order.o OrderList.o OrderBook.o -o match_engine
+debug: main.o Order.o OrderBook.o OrderList.o Input.o
+	$(GXX) $(GXXFLAGS) -g main.o Order.o OrderList.o OrderBook.o Input.o -o match_engine
 
 main.o: main.cpp
 	$(GXX) $(GXXFLAGS) main.cpp -c
@@ -18,6 +18,9 @@ OrderBook.o: OrderBook.cpp
 
 OrderList.o: OrderList.cpp
 	$(GXX) $(GXXFLAGS) OrderList.cpp -c
+
+Input.o: Input.cpp
+	$(GXX) $(GXXFLAGS) Input.cpp -c
 
 clean:
 	rm -f *.o *.exe *.gch
