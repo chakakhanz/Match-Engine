@@ -1,0 +1,35 @@
+b
+company 1
+stock
+100
+1
+b
+company 6
+stock
+90
+1
+b
+company 2
+stock
+100
+2
+b
+company 3
+stock
+100
+14
+s
+company 4
+twinkies
+42
+12
+s
+company 5
+stock
+90
+12
+s
+company 7
+stock
+100
+4
