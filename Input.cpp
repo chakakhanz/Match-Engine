@@ -18,13 +18,8 @@ Input::~Input() {
 
 void Input::check_input(std::shared_ptr<OrderBook> orderBook, Order temp, int orderType) {
 	int listToUpdate = !orderType; //list to search in order to update if a match is found. it will the opposite of the new order type
-	/*if (orderType == BUY) {
-		listToUpdate = 
-	}
-	else if (orderType == SELL) {
-		listIn = &sellOrders;
-	}*/
 	int matchID = orderBook->check_for_match(temp, orderType);
+
 	if (matchID != -1) { //match found; update order book
 		std::cout << "Match found for " << temp.party << " " << temp.instrument << " " << temp.price << " " << temp.size << std::endl;
 

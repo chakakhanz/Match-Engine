@@ -13,13 +13,17 @@ OrderBook::~OrderBook(){
 
 int OrderBook::add_order(Order newOrder, int buyOrSell){
 	//shared_ptr<vector<OrderList>> listIn = make_shared<vector<OrderList>>();
-	std::vector<OrderList> *listIn;
+	std::vector<OrderList> *listIn = nullptr;
 	if(buyOrSell == BUY){ 
 		listIn = &buyOrders;
 	}
 	else if(buyOrSell == SELL){
 		listIn = &sellOrders;
 	}
+	else {
+		return FAIL;
+	}
+
 	for (std::vector<OrderList>::iterator iter = listIn->begin(); iter != listIn->end(); iter++) {
 		if (newOrder.party.compare(iter->partyName) == 0) { //if a vector for this party already exists, add to that party
 			if (buyOrSell == BUY) {
@@ -56,12 +60,15 @@ int OrderBook::add_order(Order newOrder, int buyOrSell){
 int OrderBook::check_for_match(Order newOrder, int buyOrSell){
 	/***buyorder is checked each time for a matching sell**/
 	/**vice versa for buy orders**/
-	std::vector<OrderList> *listIn;
+	std::vector<OrderList> *listIn = nullptr;
 	if (buyOrSell == BUY) {
 		listIn = &sellOrders;
 	}
 	else if (buyOrSell == SELL) {
 		listIn = &buyOrders;
+	}
+	else {
+		return FAIL;
 	}
 
 	OrderList currentList;
@@ -85,13 +92,17 @@ int OrderBook::check_for_match(Order newOrder, int buyOrSell){
 int OrderBook::update_order(int orderID, int orderSize, int buyOrSell) {
 	//shared_ptr<vector<OrderList>> listIn = make_shared<vector<OrderList>>();
 	int returnVal = FAIL; //set default value to fail
-	std::vector<OrderList> *listIn;
+	std::vector<OrderList> *listIn = nullptr;
 	if (buyOrSell == BUY) {
 		listIn = &buyOrders;
 	}
 	else if (buyOrSell == SELL) {
 		listIn = &sellOrders;
 	}
+	else {
+		return FAIL;
+	}
+
 	int updateNodeResult;
 	for (std::vector<OrderList>::iterator iter = listIn->begin(); iter != listIn->end(); iter++) {
 		(updateNodeResult = iter->update_node(orderID, orderSize));
