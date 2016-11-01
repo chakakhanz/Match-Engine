@@ -38,7 +38,6 @@ int OrderList::update_node(int orderID, const int orderSize ){
 		if (orderID == orders[i].orderid) {
 			std::cout << "Order from " << orders[i].party << ", with " << orders[i].size << " (" << orders[i].size - orderSize << " after transaction) unit(s) of " << orders[i].instrument << " for " << orders[i].price << "\n";
 			if (orders[i].size == orderSize) { //if order is completely filled
-				//orders.erase(orders.begin() + i);
 				orders.erase(remove_if(orders.begin(), orders.end(), [orderID](Order x) {return orderID == x.orderid;}));
 				numNodes--;
 				returnVal = 0;

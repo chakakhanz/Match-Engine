@@ -25,9 +25,10 @@ void Input::check_input(std::shared_ptr<OrderBook> orderBook, Order temp, int or
 
 		int updateResult = (orderBook->update_order(matchID, temp.size, listToUpdate));
 		if (updateResult >= 1) { //means an order was removed and the remainder of the new order must be added to the book
-			std::cout << "order removed, adding remainder of new order" << std::endl;
+			std::cout << "order removed, checking for other matches.." << std::endl;
 			temp.size = updateResult;
-			orderBook->add_order(temp, orderType);
+			check_input(orderBook, temp, orderType);
+			//orderBook->add_order(temp, orderType);
 		}
 		else if (updateResult == 0) { //if both orders were completely filled
 			std::cout << "order removed, new order filled completely" << std::endl;
@@ -41,7 +42,12 @@ void Input::check_input(std::shared_ptr<OrderBook> orderBook, Order temp, int or
 		
 
 	}
-	else { //no match was found; add order to list
+	else if (matchID == -1){ //no match was found; add order to list
 		orderBook->add_order(temp, orderType);
+		std::cout << "No match found, adding new order to book" << std::endl;
 	}
+	else { //error has occured
+		std::cout << "Error during update" << std::endl;
+	}
+	std::cout << "\n";
 }

@@ -12,7 +12,6 @@ OrderBook::~OrderBook(){
 }
 
 int OrderBook::add_order(Order newOrder, int buyOrSell){
-	//shared_ptr<vector<OrderList>> listIn = make_shared<vector<OrderList>>();
 	std::vector<OrderList> *listIn = nullptr;
 	if(buyOrSell == BUY){ 
 		listIn = &buyOrders;
@@ -33,7 +32,6 @@ int OrderBook::add_order(Order newOrder, int buyOrSell){
 				newOrder.orderid = ++sellOrderID;
 			}
 			iter->add_node(newOrder);
-			//std::cout << "OrderID: " << iter->orders[iter->orders.size()-1].orderid << std::endl;
 			return 0; //tell calling function that order was added to an existing list
 		}
 	}
@@ -90,7 +88,6 @@ int OrderBook::check_for_match(Order newOrder, int buyOrSell){
 }
 
 int OrderBook::update_order(int orderID, int orderSize, int buyOrSell) {
-	//shared_ptr<vector<OrderList>> listIn = make_shared<vector<OrderList>>();
 	int returnVal = FAIL; //set default value to fail
 	std::vector<OrderList> *listIn = nullptr;
 	if (buyOrSell == BUY) {
@@ -107,12 +104,6 @@ int OrderBook::update_order(int orderID, int orderSize, int buyOrSell) {
 	for (std::vector<OrderList>::iterator iter = listIn->begin(); iter != listIn->end(); iter++) {
 		(updateNodeResult = iter->update_node(orderID, orderSize));
 		if (updateNodeResult != FAIL && updateNodeResult != NO_MATCH) {
-			/*if (buyOrSell == BUY) {
-				buyOrderID--;
-			}
-			else if (buyOrSell == SELL) {
-				sellOrderID--;
-			}*/
 			returnVal = updateNodeResult; //lets caller know result of update
 		}
 	}

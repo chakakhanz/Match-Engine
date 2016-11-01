@@ -29,8 +29,7 @@ int Order::check_best_match(Order orderIn, double bestPrice, int bestOrderID, in
 		}
 		else if (price == bestPrice && orderid > bestOrderID) { //if price is equal and the ID of this order is bigger than the current best (i.e. it is newer), then fail
 			returnVal = -1;
-		}
-		
+		}		
 	}
 	
 	if (buyOrSell == SELL) {
@@ -38,15 +37,14 @@ int Order::check_best_match(Order orderIn, double bestPrice, int bestOrderID, in
 		if (price < orderIn.price) { //cant sell to an order buying for less than the sell price
 			returnVal = -1;
 		}
-		if ((price > orderIn.price) && price != bestPrice && bestPrice != -1) { //if buy price is > than sale price BUT buy price is lower than the current best buy price
-			if (price < bestPrice) { //^must check it price != best price to avoid a false positive
+		if ((price >= orderIn.price) && price != bestPrice && bestPrice != -1) { //if buy price is > than sale price BUT buy price is lower than the current best buy price
+			if (price < bestPrice) { //^must check if price != best price to avoid a false positive
 				returnVal = -1;
 			}
 		}
 		else if (price == bestPrice && orderid > bestOrderID) { //if price is equal and the ID of this order is bigger than the current best (i.e. it is newer), then fail
 			returnVal = -1;
-		}
-		
+		}	
 	}
 	return returnVal;
 }
