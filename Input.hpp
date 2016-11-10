@@ -9,7 +9,7 @@ class Input{
 public:
 	Input();
 	~Input();
-	void check_input(std::shared_ptr<OrderBook> orderBook, Order temp, int orderType);
+	void check_input(std::shared_ptr<OrderBook> orderBook, Order *temp, int orderType);
 };
 
 #endif 

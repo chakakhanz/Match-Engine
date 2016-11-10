@@ -16,17 +16,17 @@ Input::~Input() {
 
 }
 
-void Input::check_input(std::shared_ptr<OrderBook> orderBook, Order temp, int orderType) {
+void Input::check_input(std::shared_ptr<OrderBook> orderBook, Order *temp, int orderType) {
 	int listToUpdate = !orderType; //list to search in order to update if a match is found. it will the opposite of the new order type
 	int matchID = orderBook->check_for_match(temp, orderType);
 
 	if (matchID != -1) { //match found; update order book
-		std::cout << "Match found for " << temp.party << " " << temp.instrument << " " << temp.price << " " << temp.size << std::endl;
+		std::cout << "Match found for " << temp->party << " " << temp->instrument << " " << temp->price << " " << temp->size << std::endl;
 
-		int updateResult = (orderBook->update_order(matchID, temp.size, listToUpdate));
+		int updateResult = (orderBook->update_order(matchID, temp->size, listToUpdate));
 		if (updateResult >= 1) { //means an order was removed and the remainder of the new order must be added to the book
 			std::cout << "order removed, checking for other matches.." << std::endl;
-			temp.size = updateResult;
+			temp->size = updateResult;
 			check_input(orderBook, temp, orderType);
 			//orderBook->add_order(temp, orderType);
 		}

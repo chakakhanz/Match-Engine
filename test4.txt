@@ -5,7 +5,7 @@ contract
 1
 b
 company a
-bondolino
+cheese
 100
 1
 b

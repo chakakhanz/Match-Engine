@@ -11,7 +11,7 @@ OrderBook::OrderBook():buyOrderID(0), sellOrderID(0){
 OrderBook::~OrderBook(){
 }
 
-int OrderBook::add_order(Order newOrder, int buyOrSell){
+int OrderBook::add_order(Order *newOrder, int buyOrSell){
 	std::vector<OrderList> *listIn = nullptr;
 	if(buyOrSell == BUY){ 
 		listIn = &buyOrders;
@@ -24,12 +24,12 @@ int OrderBook::add_order(Order newOrder, int buyOrSell){
 	}
 
 	for (std::vector<OrderList>::iterator iter = listIn->begin(); iter != listIn->end(); iter++) {
-		if (newOrder.party.compare(iter->partyName) == 0) { //if a vector for this party already exists, add to that party
+		if (newOrder->party.compare(iter->partyName) == 0) { //if a vector for this party already exists, add to that party
 			if (buyOrSell == BUY) {
-				newOrder.orderid = ++buyOrderID;
+				newOrder->orderid = ++buyOrderID;
 			}
 			else if (buyOrSell == SELL) {
-				newOrder.orderid = ++sellOrderID;
+				newOrder->orderid = ++sellOrderID;
 			}
 			iter->add_node(newOrder);
 			return 0; //tell calling function that order was added to an existing list
@@ -39,10 +39,10 @@ int OrderBook::add_order(Order newOrder, int buyOrSell){
 	try {
 		OrderList temp = OrderList();
 		if (buyOrSell == BUY) {
-			newOrder.orderid = ++buyOrderID;
+			newOrder->orderid = ++buyOrderID;
 		}
 		else if (buyOrSell == SELL) {
-			newOrder.orderid = ++sellOrderID;
+			newOrder->orderid = ++sellOrderID;
 		}
 		temp.add_node(newOrder);
 		listIn->push_back(temp);
@@ -55,7 +55,7 @@ int OrderBook::add_order(Order newOrder, int buyOrSell){
 }
 
 
-int OrderBook::check_for_match(Order newOrder, int buyOrSell){
+int OrderBook::check_for_match(Order *newOrder, int buyOrSell) {
 	/***buyorder is checked each time for a matching sell**/
 	/**vice versa for buy orders**/
 	std::vector<OrderList> *listIn = nullptr;
@@ -73,12 +73,12 @@ int OrderBook::check_for_match(Order newOrder, int buyOrSell){
 	int currentMatch = -1;
 	double bestPrice = -1.0;
 	for (std::vector<OrderList>::iterator iter = listIn->begin(); iter != listIn->end(); iter++) {
-		if (iter->partyName.compare(newOrder.party) != 0) { //only check when parties aren't the same; not buying and selling to ourselves
+		if (iter->partyName.compare(newOrder->party) != 0) { //only check when parties aren't the same; not buying and selling to ourselves
 			currentList = *iter;
-			for (std::vector<Order>::iterator i = currentList.orders.begin(); i != currentList.orders.end(); i++) {			
-				if (i->check_best_match(newOrder, bestPrice, currentMatch, buyOrSell) == 0) {		
-					currentMatch = i->orderid;
-					bestPrice = i->price;
+			for (std::vector<Order*>::iterator i = currentList.orders.begin(); i != currentList.orders.end(); i++) {
+				if ((*i)->check_best_match(*newOrder, bestPrice, currentMatch, buyOrSell) == 0) {
+					currentMatch = (*i)->orderid;
+					bestPrice = (*i)->price;
 				}
 			}
 		}
@@ -121,15 +121,50 @@ int OrderBook::update_order(int orderID, int orderSize, int buyOrSell) {
 	return returnVal;
 }
 
-void OrderBook::show_orders(int buyOrSell){
-	if(buyOrSell == BUY){
-		for(std::vector<OrderList>::iterator iter = buyOrders.begin(); iter != buyOrders.end(); iter++){
-			iter->show_data();
+void OrderBook::show_orders() {
+	std::cout << "*******LIST OF BUY ORDERS******\n";
+	for (std::vector<OrderList>::iterator iter = buyOrders.begin(); iter != buyOrders.end(); iter++) {
+		iter->show_data();
+	}
+	std::cout << "\n";
+
+	std::cout << "*******LIST OF SELL ORDERS******\n";
+	for (std::vector<OrderList>::iterator iter = sellOrders.begin(); iter != sellOrders.end(); iter++) {
+		iter->show_data();
+	}
+	std::cout << "\n";
+
+
+
+
+}
+
+Order* OrderBook::change_order(int orderID, int buyOrSell) {
+	std::vector<OrderList> listIn;
+	if (buyOrSell == BUY) {
+		listIn = buyOrders;
+	}
+	else if (buyOrSell == SELL) {
+		listIn = sellOrders;
+	}
+	else {
+		return nullptr;
+	}
+
+	Order* orderObj = nullptr;
+	for (std::vector<OrderList>::iterator iter = listIn.begin(); iter != listIn.end(); iter++) {
+		if ((orderObj = iter->find_order(orderID)) != nullptr){
+			break;
 		}
 	}
-	else if(buyOrSell == SELL){
-		for(std::vector<OrderList>::iterator iter = sellOrders.begin(); iter != sellOrders.end(); iter++){
-			iter->show_data();
-		}
+	return orderObj;
+}
+
+void OrderBook::reset_priority(Order* result, int orderType) {
+	if (orderType == BUY && result->orderid != buyOrderID) {
+		result->orderid = ++buyOrderID;
+	}
+	if (orderType == SELL && result->orderid != sellOrderID) {
+		result->orderid = ++sellOrderID;
 	}
 }
