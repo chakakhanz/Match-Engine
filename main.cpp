@@ -59,7 +59,7 @@ int main(){
 				size = stoi(buf);
 
 				Order* temp = new Order(party, instrument, price, size);
-				inputObj.check_input(orderBook, temp, orderType);
+				inputObj.check_input(orderBook, temp, orderType, true);
 			}
 			fileName.close();
 			std::cout << "File reading complete. If you'd like to view the order book, press v. Otherwise, press any key to exit\n";
@@ -108,7 +108,7 @@ int main(){
 
 				Order* temp = new Order(party, instrument, price, size); 
 				std::cout << "checking..\n";
-				inputObj.check_input(orderBook, temp, orderType); //checks for match already in book and updates lists as needed
+				inputObj.check_input(orderBook, temp, orderType, true); //checks for match already in book and updates lists as needed
 				continue;
 			}
 			else if (option.compare("n") == 0) {
@@ -167,7 +167,7 @@ int main(){
 						}
 						if ((newPrice != -1 && (newPrice != oldPrice)) || newSize < oldSize) {
 							orderBook->reset_priority(result, orderType);
-							inputObj.check_input(orderBook, result, orderType);
+							inputObj.check_input(orderBook, result, orderType, false);
 						}						
 					}
 				}
