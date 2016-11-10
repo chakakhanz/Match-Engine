@@ -155,7 +155,7 @@ int main(){
 					}
 					
 					if (newPrice == -1 && newSize == -1) {
-						std::cout << "Error\n";
+						std::cout << "No update\n";
 						continue;
 					}
 					else {
@@ -165,10 +165,10 @@ int main(){
 						if (newSize != -1){
 							result->size = newSize;
 						}
-						if (newPrice != -1 && (newPrice != oldPrice) || newSize < oldSize) {
+						if ((newPrice != -1 && (newPrice != oldPrice)) || newSize < oldSize) {
 							orderBook->reset_priority(result, orderType);
-						}
-						
+							inputObj.check_input(orderBook, result, orderType);
+						}						
 					}
 				}
 			}

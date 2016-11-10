@@ -27,9 +27,11 @@ int OrderBook::add_order(Order *newOrder, int buyOrSell){
 		if (newOrder->party.compare(iter->partyName) == 0) { //if a vector for this party already exists, add to that party
 			if (buyOrSell == BUY) {
 				newOrder->orderid = ++buyOrderID;
+				std::cout << "New Order ID: " << buyOrderID << std::endl;
 			}
 			else if (buyOrSell == SELL) {
 				newOrder->orderid = ++sellOrderID;
+				std::cout << "New Order ID: " << sellOrderID << std::endl;
 			}
 			iter->add_node(newOrder);
 			return 0; //tell calling function that order was added to an existing list
@@ -40,9 +42,11 @@ int OrderBook::add_order(Order *newOrder, int buyOrSell){
 		OrderList temp = OrderList();
 		if (buyOrSell == BUY) {
 			newOrder->orderid = ++buyOrderID;
+			std::cout << "New Order ID: " << buyOrderID << std::endl;
 		}
 		else if (buyOrSell == SELL) {
 			newOrder->orderid = ++sellOrderID;
+			std::cout << "New Order ID: " << sellOrderID << std::endl;
 		}
 		temp.add_node(newOrder);
 		listIn->push_back(temp);
