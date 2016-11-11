@@ -92,5 +92,4 @@ int OrderList::remove_order(std::shared_ptr<Order> orderIn) {
 		}
 	}
 	return -1;
-	//unique pointer should automatically get deleted once this function is out of scope
 }

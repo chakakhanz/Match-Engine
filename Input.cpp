@@ -75,7 +75,7 @@ void Input::manual_mode(std::shared_ptr<OrderBook> orderBook) {
 	std::string party, instrument;
 	double price;
 	int size;
-	std::string tempStr; //for storing number strings from command line for conversion
+	std::string tempStr; //for storing string containing numbers from command line for conversion
 	std::string buyOrSell;
 	int orderType;
 	while (1) { //input loop
@@ -138,7 +138,7 @@ void Input::file_mode(std::shared_ptr<OrderBook> orderBook) {
 	std::string party, instrument;
 	double price;
 	int size;
-	std::string tempStr; //for storing number strings from command line for conversion
+	std::string tempStr; //for storing strings containing numbers from command line for conversion
 	int orderType;
 
 	std::shared_ptr<std::ifstream> fileName = std::make_shared<std::ifstream>();
@@ -242,7 +242,7 @@ void Input::change_order(std::shared_ptr<OrderBook> orderBook) {
 				result->size = newSize;
 			}
 			if ((newPrice != -1 && (newPrice != oldPrice)) || newSize < oldSize) {
-				std::shared_ptr<Order> temp = orderBook->reset_priority(result, orderType); //deletes old order, returns updated order in a new object
+				std::shared_ptr<Order> temp = orderBook->reset_priority(result, orderType); //deletes old order, returns a copy of the order in a new object
 				check_input(orderBook, temp, orderType); //re-add the order to the list, effectively resetting its priority
 			}
 		}
@@ -295,7 +295,7 @@ void Input::change_order(std::shared_ptr<OrderBook> orderBook, std::shared_ptr<s
 				result->size = newSize;
 			}
 			if ((newPrice != -1 && (newPrice != oldPrice)) || newSize < oldSize) {
-				std::shared_ptr<Order> temp = orderBook->reset_priority(result, orderType); //deletes old order, returns updated order in a new object
+				std::shared_ptr<Order> temp = orderBook->reset_priority(result, orderType); //deletes old order, returns a copy of the order in a new object
 				check_input(orderBook, temp, orderType); //re-add the order to the list, effectively resetting its priority
 			}
 		}

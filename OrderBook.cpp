@@ -153,7 +153,7 @@ std::shared_ptr<Order> OrderBook::change_order(int orderID, int buyOrSell) {
 
 	std::shared_ptr<Order> orderObj = nullptr;
 	for (std::vector<OrderList>::iterator iter = listIn->begin(); iter != listIn->end(); iter++) {
-		if ((orderObj = iter->find_order(orderID)) != nullptr){
+		if ((orderObj = iter->find_order(orderID)) != nullptr){ //if this does not return null, it means the order was found and that orderObj now points to it
 			break;
 		}
 	}
@@ -162,7 +162,7 @@ std::shared_ptr<Order> OrderBook::change_order(int orderID, int buyOrSell) {
 
 std::shared_ptr<Order> OrderBook::reset_priority(std::shared_ptr<Order> result, int buyOrSell) {
 	std::vector<OrderList> *listIn = nullptr;
-	std::shared_ptr<Order> temp = std::make_shared<Order>(result->party, result->instrument, result->price, result->size);
+	std::shared_ptr<Order> temp = std::make_shared<Order>(result->party, result->instrument, result->price, result->size); //make a copy of the object before removing from the list
 	if (buyOrSell == BUY) {
 		listIn = &buyOrders;
 	}
@@ -175,10 +175,10 @@ std::shared_ptr<Order> OrderBook::reset_priority(std::shared_ptr<Order> result, 
 	
 	int wasRemoved;
 	for (std::vector<OrderList>::iterator iter = listIn->begin(); iter != listIn->end(); iter++) {
-		if ((wasRemoved = iter->remove_order(result)) == 0) {
-			return temp;
+		if ((wasRemoved = iter->remove_order(result)) == 0) { //if this equals zero, it means that the order was removed
+			return temp; //the copy of the object is returned for re-entry into the list
 		}
 	
 	}
-	return nullptr;
+	return nullptr; //a failed removal returns null
 }
