@@ -11,7 +11,7 @@ OrderBook::OrderBook():buyOrderID(0), sellOrderID(0){
 OrderBook::~OrderBook(){
 }
 
-int OrderBook::add_order(Order *newOrder, int buyOrSell){
+int OrderBook::add_order(std::shared_ptr<Order> newOrder, int buyOrSell){
 	std::vector<OrderList> *listIn = nullptr;
 	if(buyOrSell == BUY){ 
 		listIn = &buyOrders;
@@ -59,7 +59,7 @@ int OrderBook::add_order(Order *newOrder, int buyOrSell){
 }
 
 
-int OrderBook::check_for_match(Order *newOrder, int buyOrSell) {
+int OrderBook::check_for_match(std::shared_ptr<Order> newOrder, int buyOrSell) {
 	/***buyorder is checked each time for a matching sell**/
 	/**vice versa for buy orders**/
 	std::vector<OrderList> *listIn = nullptr;
@@ -79,8 +79,8 @@ int OrderBook::check_for_match(Order *newOrder, int buyOrSell) {
 	for (std::vector<OrderList>::iterator iter = listIn->begin(); iter != listIn->end(); iter++) {
 		if (iter->partyName.compare(newOrder->party) != 0) { //only check when parties aren't the same; not buying and selling to ourselves
 			currentList = *iter;
-			for (std::vector<Order*>::iterator i = currentList.orders.begin(); i != currentList.orders.end(); i++) {
-				if ((*i)->check_best_match(*newOrder, bestPrice, currentMatch, buyOrSell) == 0) {
+			for (std::vector<std::shared_ptr<Order>>::iterator i = currentList.orders.begin(); i != currentList.orders.end(); i++) {
+				if ((*i)->check_best_match(newOrder, bestPrice, currentMatch, buyOrSell) == 0) {
 					currentMatch = (*i)->orderid;
 					bestPrice = (*i)->price;
 				}
@@ -137,26 +137,22 @@ void OrderBook::show_orders() {
 		iter->show_data();
 	}
 	std::cout << "\n";
-
-
-
-
 }
 
-Order* OrderBook::change_order(int orderID, int buyOrSell) {
-	std::vector<OrderList> listIn;
+std::shared_ptr<Order> OrderBook::change_order(int orderID, int buyOrSell) {
+	std::vector<OrderList> *listIn = nullptr;
 	if (buyOrSell == BUY) {
-		listIn = buyOrders;
+		listIn = &buyOrders;
 	}
 	else if (buyOrSell == SELL) {
-		listIn = sellOrders;
+		listIn = &sellOrders;
 	}
 	else {
 		return nullptr;
 	}
 
-	Order* orderObj = nullptr;
-	for (std::vector<OrderList>::iterator iter = listIn.begin(); iter != listIn.end(); iter++) {
+	std::shared_ptr<Order> orderObj = nullptr;
+	for (std::vector<OrderList>::iterator iter = listIn->begin(); iter != listIn->end(); iter++) {
 		if ((orderObj = iter->find_order(orderID)) != nullptr){
 			break;
 		}
@@ -164,11 +160,25 @@ Order* OrderBook::change_order(int orderID, int buyOrSell) {
 	return orderObj;
 }
 
-void OrderBook::reset_priority(Order* result, int orderType) {
-	if (orderType == BUY && result->orderid != buyOrderID) {
-		result->orderid = ++buyOrderID;
+std::shared_ptr<Order> OrderBook::reset_priority(std::shared_ptr<Order> result, int buyOrSell) {
+	std::vector<OrderList> *listIn = nullptr;
+	std::shared_ptr<Order> temp = std::make_shared<Order>(result->party, result->instrument, result->price, result->size);
+	if (buyOrSell == BUY) {
+		listIn = &buyOrders;
 	}
-	if (orderType == SELL && result->orderid != sellOrderID) {
-		result->orderid = ++sellOrderID;
+	else if (buyOrSell == SELL) {
+		listIn = &sellOrders;
 	}
+	else {
+		return nullptr; //failure
+	}
+	
+	int wasRemoved;
+	for (std::vector<OrderList>::iterator iter = listIn->begin(); iter != listIn->end(); iter++) {
+		if ((wasRemoved = iter->remove_order(result)) == 0) {
+			return temp;
+		}
+	
+	}
+	return nullptr;
 }

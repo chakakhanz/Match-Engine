@@ -9,7 +9,8 @@ bond
 200
 4
 s
-company c
+comp
+any c
 contract
 100
 4

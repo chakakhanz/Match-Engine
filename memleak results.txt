@@ -1,15 +1,15 @@
 Dr. Memory version 1.11.0 build 2 built on Aug 29 2016 02:42:07
-Dr. Memory results for pid 25252: "MatchEngine.exe"
-Application cmdline: "C:\Users\mrayd\Desktop\MatchEngine.exe"
+Dr. Memory results for pid 1848: "MatchEngine.exe"
+Application cmdline: "C:\users\mrayd\desktop\MatchEngine.exe"
 Recorded 115 suppression(s) from default C:\Program Files (x86)\Dr. Memory\bin\suppress-default.txt
 
-Error #1: REACHABLE LEAK 168 direct bytes 0x019f9128-0x019f91d0 + 0 indirect bytes
+Error #1: REACHABLE LEAK 168 direct bytes 0x01139128-0x011391d0 + 0 indirect bytes
 <memory was allocated before tool took control>
 
-Error #2: REACHABLE LEAK 44 direct bytes 0x019f91f0-0x019f921c + 0 indirect bytes
+Error #2: REACHABLE LEAK 44 direct bytes 0x011391f0-0x0113921c + 0 indirect bytes
 <memory was allocated before tool took control>
 
-Error #3: REACHABLE LEAK 78 direct bytes 0x019f9240-0x019f928e + 0 indirect bytes
+Error #3: REACHABLE LEAK 78 direct bytes 0x01139240-0x0113928e + 0 indirect bytes
 <memory was allocated before tool took control>
 
 ===========================================================================
@@ -31,5 +31,5 @@ ERRORS FOUND:
       3 unique,     3 total,    290 byte(s) of still-reachable allocation(s)
 ERRORS IGNORED:
      44 potential error(s) (suspected false positives)
-         (details: C:\Users\mrayd\AppData\Roaming\Dr. Memory\DrMemory-MatchEngine.exe.25252.000\potential_errors.txt)
-Details: C:\Users\mrayd\AppData\Roaming\Dr. Memory\DrMemory-MatchEngine.exe.25252.000\results.txt
+         (details: C:\Users\mrayd\AppData\Roaming\Dr. Memory\DrMemory-MatchEngine.exe.1848.000\potential_errors.txt)
+Details: C:\Users\mrayd\AppData\Roaming\Dr. Memory\DrMemory-MatchEngine.exe.1848.000\results.txt

@@ -11,14 +11,14 @@ public:
 	std::string partyName; /*store the name of the party to which the vector belongs,
 						needed to ensure orders from one party go to only one vector
 						*/
-	std::vector<Order*> orders;
+	std::vector<std::shared_ptr<Order>> orders;
 	int numNodes;
 
-	int add_node(Order *newOrder);
+	int add_node(std::shared_ptr<Order> newOrder);
 	int update_node(int orderID, const int orderSize);
-	void show_data() const; //for debugging
-	Order* find_order(int orderID);
-	
+	void show_data();
+	std::shared_ptr<Order> find_order(int orderID);
+	int remove_order(std::shared_ptr<Order> orderIn);
 };
 
 #endif
