@@ -40,14 +40,13 @@ void Input::check_input(std::shared_ptr<OrderBook> orderBook, std::shared_ptr<Or
 	int matchID = orderBook->check_for_match(temp, orderType);
 
 	if (matchID != -1) { //match found; update order book
-		std::cout << "Match found for " << temp->party << " " << temp->instrument << " " << temp->price << " " << temp->size << std::endl;
+		std::cout << "Match found for " << temp->party << ", with " << temp->size << " unit(s) of " << temp->instrument << " at " << temp->price << " each" << std::endl;
 
 		int updateResult = (orderBook->update_order(matchID, temp->size, listToUpdate));
 		if (updateResult >= 1) { //means an order was removed and the remainder of the new order must be added to the book
 			std::cout << "order removed, checking for other matches.." << std::endl;
 			temp->size = updateResult;
 			check_input(orderBook, temp, orderType);
-			//orderBook->add_order(temp, orderType);
 		}
 		else if (updateResult == 0) { //if both orders were completely filled
 			std::cout << "order removed, new order filled completely" << std::endl;

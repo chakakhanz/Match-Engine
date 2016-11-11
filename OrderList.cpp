@@ -5,7 +5,7 @@
 #include <algorithm>
 
 
-OrderList::OrderList(): partyName(""), numNodes(0){
+OrderList::OrderList(): partyName(""){
 }
 
 OrderList::~OrderList() {}
@@ -23,7 +23,6 @@ int OrderList::add_node(std::shared_ptr<Order> newOrder){
 	}
 	try {
 		orders.push_back(newOrder);
-		numNodes++;
 		return 0;
 	}
 	catch (int e) {
